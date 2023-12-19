@@ -8,7 +8,7 @@ using TMPro;
 public class Alphabetcheck : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] XRInteractionManager _xr_manger;
+    [SerializeField] Light _light;
     [SerializeField] XRSocketInteractor _Socket;
     [SerializeField] string[] _answer;
     [SerializeField] string[] _question;
@@ -33,7 +33,8 @@ public class Alphabetcheck : MonoBehaviour
     }
    public  void rest(bool is_full_reset)
     {
-        for(int i = 0; i < _is_spawon.Length;i++)
+        _final_answer = string.Empty;
+        for (int i = 0; i < _is_spawon.Length;i++)
         {
             _is_spawon[i] = false;
         }
@@ -47,6 +48,7 @@ public class Alphabetcheck : MonoBehaviour
             _answer_text.text = string.Empty;
             generate_answer(_answer[_question_answer_number]);
         }
+        Resources.UnloadUnusedAssets();
     }
     void generate_question(string question)
     {
@@ -59,6 +61,7 @@ public class Alphabetcheck : MonoBehaviour
         _is_spawon = new bool[answer.Length * 2];
         char[] letter = answer.ToUpper().ToCharArray();
         char[] charalphabet = alphabet.ToCharArray();
+        _is_final_answer_complete = true;
         for (int i = 0; i < letter.Length; i++)
         {
             if (i == _question_answer_number)
@@ -82,8 +85,15 @@ public class Alphabetcheck : MonoBehaviour
     }
     void check_answer(bool is_right)
     {
-        // red light if false 
-        // green light if true
+        _light.color = is_right ? Color.green : Color.red;
+    }
+    public void change_the_question()
+    {
+        _question_answer_number = Random.Range(0, _question.Length);
+        rest(true);
+        _answer_text.text = string.Empty;
+        generate_question(_question[_question_answer_number]);
+        _right_answer = _answer[_question_answer_number].ToUpper();
     }
     // Update is called once per frame
     void Update()
@@ -92,6 +102,7 @@ public class Alphabetcheck : MonoBehaviour
         {
             IXRSelectInteractable _object = _Socket.GetOldestInteractableSelected();
             _final_answer += _object.transform.gameObject.name.Replace("(Clone)",string.Empty);
+            _answer_text.text += _object.transform.gameObject.name.Replace("(Clone)", string.Empty);
             Destroy(_object.transform.gameObject);
         }
         if(_final_answer !=null && _is_final_answer_complete && _final_answer.Length == _right_answer.Length)
