@@ -98,13 +98,15 @@ public class light_game_button : MonoBehaviour
         if (seq_check[index] != _object.GetInstanceID() || index > seq_check.Count)
         {
             reset_level();
-            _Alert_number = 1;
+            _light_game_text.text = string.Empty;
+           _Alert_number = 1;
             _Alert_mes("Wrong Answer Do you want to try agian ?");
             return;
         }
         index++;
         if (index == seq_check.Count)
         {
+            _light_game_text.text = string.Empty;
              reset_level();
             _Alert_number = 2;
             _Alert_mes("Congratulations You Win \r\ndo you want to go to the next level");
