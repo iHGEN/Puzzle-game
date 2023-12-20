@@ -13,7 +13,7 @@ public class CableDetector : MonoBehaviour
         if (Socket.hasSelection)
         {
             IXRSelectInteractable result = Socket.GetOldestInteractableSelected();
-            if(result.transform.gameObject.tag == gameObjecttag)
+            if (result.transform.gameObject.tag == gameObjecttag)
             {
                 if (!is_check)
                 {
@@ -34,10 +34,12 @@ public class CableDetector : MonoBehaviour
             {
                 is_check = false;
                 Particle.Play();
-                Light.gameObject.SetActive(false);
             }
-
         } 
+        else
+        {
+            Light.gameObject.SetActive(false);
+        }
     }
 }
 

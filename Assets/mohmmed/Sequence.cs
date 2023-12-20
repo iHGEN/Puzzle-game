@@ -9,8 +9,23 @@ public class Sequence : MonoBehaviour
     bool[] is_right = new bool[4];
     [SerializeField] ParticleSystem particle;
     [SerializeField] GameObject[] buttons;
+    [SerializeField] GameObject[] _Socket;
+    [SerializeField] GameObject[] _cables;
+    Vector3[] _orginal;
     public bool submit_result;
     int num = 0;
+    private void Start()
+    {
+        get_cables_locations();
+    }
+    void get_cables_locations()
+    {
+        _orginal = new Vector3[_cables.Length];
+        for (int i = 0;i < _orginal.Length;i++)
+        {
+            _orginal[i] = _cables[i].transform.position;
+        }
+    }
     void check_win()
     {
        bool  final_submit = false;
@@ -35,8 +50,12 @@ public class Sequence : MonoBehaviour
         {
             if (buttons[i] != null)
             {
+                _Socket[i].SetActive(false);
+                _cables[i].transform.position = _orginal[i];
                 buttons[i].SetActive(true);
+                spotLightNames[i] = string.Empty;
                 buttonNames[i] = string.Empty;
+                _Socket[i].SetActive(true);
             }
         }
     }
@@ -44,6 +63,7 @@ public class Sequence : MonoBehaviour
     {
         if (num > spotLightNames.Length)
         {
+            button_reset();
             num = 0;
         }
         buttonNames[num] = gameObject.name.Replace("Button","");
