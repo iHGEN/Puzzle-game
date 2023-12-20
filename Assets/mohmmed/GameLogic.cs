@@ -32,12 +32,12 @@ public class CableDetector : MonoBehaviour
             }
             else
             {
-                is_check = false;
                 Particle.Play();
             }
         } 
         else
         {
+            is_check = false;
             Light.gameObject.SetActive(false);
         }
     }

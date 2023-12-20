@@ -65,6 +65,7 @@ public class Sequence : MonoBehaviour
         {
             button_reset();
             num = 0;
+            return;
         }
         buttonNames[num] = gameObject.name.Replace("Button","");
         if (spotLightNames[num].Contains(buttonNames[num]))
@@ -77,6 +78,7 @@ public class Sequence : MonoBehaviour
         {
             button_reset();
             num = 0;
+            return;
         }
         num++;
     }
