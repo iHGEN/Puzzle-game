@@ -2,14 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class CipherText : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI text;
+    [SerializeField] TextMeshProUGUI _plainText;
+
     private string userText;
-    private int cipherIndex = 2;
-    private string alphabetLetters = " abcdefghijklmnopqrstuvwxyz";
+    private string cipherText = "";
+    private string plainText = ""; 
+    private int shift = 3;
     private char[] alphabet;
     private string[] words = new string[] {"Riyadh", "Jeddah", "Tuwaiq", "Meta", "Expo", "World Cup"};
     private int randNum;
@@ -25,29 +29,49 @@ public class CipherText : MonoBehaviour
     
     void Update()
     {
-        if (userText != null)
-        {
-            EncryptedText(userText);
-
-        }
+        
+        
     }
-    void EncryptedText(string word)
+    public void EncryptedText()
     {
-        string assigned_word = null; 
-        for (int i = 0; i < word.Length; i++)
+        shift %= 26;
+
+        foreach (char ch in userText) 
         {
-            assigned_word += word[i];
-
-
+            if (char.IsLetter(ch)) 
+            {
+                char baseChar = char.IsUpper(ch) ? 'A' : 'a';
+                char encryptedChar = (char)(((ch - baseChar + shift) % 26) + baseChar);
+                cipherText += encryptedChar;
+            } 
+            else
+            {
+                cipherText += ch;
+            }
         }
-        text.text = assigned_word;
 
-
-
+        text.text = cipherText;
     }
 
-    void DecryptText()
+    public void DecryptText()
     {
+        shift %= 26;
+
+        foreach (char ch in cipherText)
+        {
+            if (char.IsLetter(ch))
+            {
+                char baseChar = char.IsUpper(ch) ? 'A' : 'a';
+                char encryptedChar = (char)(((ch - baseChar - shift + 26) % 26) + baseChar);
+                plainText += encryptedChar;
+            }
+            else
+            {
+                plainText += ch;
+            }
+        }
+
+        _plainText.text = plainText;
 
     }
 
