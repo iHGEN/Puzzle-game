@@ -12,15 +12,20 @@ public class light_game_button : MonoBehaviour
     [SerializeField] TextMeshProUGUI _error_text;
     [SerializeField] TextMeshProUGUI _light_game_text;
     [SerializeField] GameObject _Error_canvas;
+    [SerializeField] GameObject _start_button;
     int _Alert_number = 0;
     int level_index = 1;
-    Dictionary<int, int> seq_check = new();
+    int[] seq_check;
     bool[] _is_choose;
     int index = 0;
     
     void Start()
     {
         _is_choose = new bool[_button.Length];
+        button_interactable(false);
+    }
+    public void get_start()
+    {
         start_level(level_index);
     }
     void disable_light(Image image)
@@ -45,15 +50,17 @@ public class light_game_button : MonoBehaviour
     public async void start_level(int num)
     {
         int random = 0;
-        seq_check.Clear();
         button_interactable(false);
         _light_game_text.text = $"Current Level {num}";
-        for(int i = 0; i < 4 + num; i++)
+        int max = 4 + num;
+        seq_check = new int[max]; 
+        for (int i = 0; i < max; i++)
         {
             start:
             random = Random.Range(0, _button.Length);
             if(_is_choose[random]) { goto start; }
-            seq_check.Add(i, _button[random].GetInstanceID());
+            _is_choose[random] = true;
+            seq_check[i] = _button[random].GetInstanceID();
             _image[random].color = Color.red;
             await Task.Delay(1000);
             disable_light(_image[random]);
@@ -68,6 +75,7 @@ public class light_game_button : MonoBehaviour
     public void Alert_button(bool isyes)
     {
         index = 0;
+        button_interactable(false);
         switch (_Alert_number)
         {
             case 1:
@@ -77,6 +85,9 @@ public class light_game_button : MonoBehaviour
                     _Error_canvas.SetActive(false);
                     return;
                 }
+                _light_game_text.text = "Light Game puzzle";
+                level_index = 1;
+                _start_button.SetActive(true);
                 _Error_canvas.SetActive(false);
                 break;
             case 2:
@@ -87,27 +98,28 @@ public class light_game_button : MonoBehaviour
                     _Error_canvas.SetActive(false);
                     return;
                 }
+                _light_game_text.text = "Light Game puzzle";
+                _start_button.SetActive(true);
                 level_index = 1;
-                start_level(level_index);
                 _Error_canvas.SetActive(false);
                 break;
         }
     }
     public void check_final(GameObject _object)
     {
-        if (seq_check[index] != _object.GetInstanceID() || index > seq_check.Count)
+        if (seq_check[index] != _object.GetInstanceID() || index > seq_check.Length)
         {
             reset_level();
             _light_game_text.text = string.Empty;
-           _Alert_number = 1;
+            _Alert_number = 1;
             _Alert_mes("Wrong Answer Do you want to try agian ?");
             return;
         }
         index++;
-        if (index == seq_check.Count)
+        if (index == seq_check.Length)
         {
             _light_game_text.text = string.Empty;
-             reset_level();
+            reset_level();
             _Alert_number = 2;
             _Alert_mes("Congratulations You Win \r\ndo you want to go to the next level");
             return;
