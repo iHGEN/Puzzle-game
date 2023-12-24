@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - player
+  - CableRed
+  - CableGreen
+  - CableYellow
+  - CableGrey
+  - BallDetector
   layers:
   - Default
   - TransparentFX
