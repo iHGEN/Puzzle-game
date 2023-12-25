@@ -9,14 +9,17 @@ public class CipherText : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] TextMeshProUGUI _plainText;
+    [SerializeField] GameObject winningScreen;
 
     private string userText;
+    private string wrd;
     private string cipherText = "";
     private string plainText = ""; 
-    private int shift = 3;
+    private int shift;
     private char[] alphabet;
-    private string[] words = new string[] {"Riyadh", "Jeddah", "Tuwaiq", "Meta", "Expo", "World Cup"};
+    private string[] words = new string[] {"Riyadh", "Jeddah", "Tuwaiq", "Meta", "Expo", "Unity"};
     private int randNum;
+    private bool isRestartGame; 
 
     //user input
 
@@ -24,19 +27,29 @@ public class CipherText : MonoBehaviour
     void Start()
     {
         randNum = Random.Range(0, words.Length);
-        Debug.Log(words[randNum]);
+        wrd = words[randNum];
+        shift = Random.Range(1, 3);
     }
     
     void Update()
     {
+        if (isWinner())
+        {
+            //winningScreen.SetActive(true);
+            Debug.Log("You Won!");
+        }
         
-        
+
     }
+
+   
     public void EncryptedText()
     {
+        cipherText = null;
         shift %= 26;
-
-        foreach (char ch in userText) 
+        randNum = Random.Range(0, words.Length);
+        wrd = words[randNum];
+        foreach (char ch in wrd) 
         {
             if (char.IsLetter(ch)) 
             {
@@ -56,7 +69,7 @@ public class CipherText : MonoBehaviour
     public void DecryptText()
     {
         shift %= 26;
-
+        plainText = null;
         foreach (char ch in cipherText)
         {
             if (char.IsLetter(ch))
@@ -75,14 +88,23 @@ public class CipherText : MonoBehaviour
 
     }
 
-    void CheckText()
+    private bool isWinner()
     {
+        if ( userText == plainText)
+        {  return true; }
+
+        else
+        {
+            Debug.Log("You Lost!");
+            return false;
+        }
 
     }
 
+    
 
 
-
+   
 
     public void ReadInputText(string s)
     {
