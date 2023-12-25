@@ -52,6 +52,7 @@ public class Sequence : MonoBehaviour
             {
                 _Socket[i].SetActive(false);
                 _cables[i].transform.position = _orginal[i];
+
                 buttons[i].SetActive(true);
                 spotLightNames[i] = string.Empty;
                 buttonNames[i] = string.Empty;
