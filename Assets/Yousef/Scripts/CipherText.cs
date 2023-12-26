@@ -39,10 +39,10 @@ public class CipherText : MonoBehaviour
     {
         
         
-            //winningScreen.SetActive(isWinner());
-            
-       
+            isWinner();
+
         
+
 
     }
 
@@ -92,10 +92,15 @@ public class CipherText : MonoBehaviour
 
     }
 
-    private bool isWinner()
+   
+    public bool isWinner()
     {
         if ( userText == plainText)
-        {  return true; }
+        {
+            winningScreen.SetActive(true);
+            return true; 
+            
+        }
 
         else
         {
@@ -112,7 +117,7 @@ public class CipherText : MonoBehaviour
 
     public void ReadInputText(string s)
     {
-        userText = s;
+        userText = s.Trim(); 
     }
 
 
