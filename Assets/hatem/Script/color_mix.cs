@@ -20,8 +20,15 @@ public class color_mix : MonoBehaviour
     void Start()
     {
         _color_rgb = new float[3];
+        button_interactable(false);
     }
-
+   public void button_interactable(bool is_enabled)
+    {
+        for (int i = 0; i < _button.Length; i++)
+        {
+            _button[i].GetComponent<Button>().interactable = is_enabled;
+        }
+    }
     public void change_color()
     {
         _start_button.SetActive(false);
@@ -56,6 +63,7 @@ public class color_mix : MonoBehaviour
             _Canvas_Error.SetActive(false);
             return;
         }
+        button_interactable(false);
         _sub_text.text = "Color Mix Game puzzle";
         _Canvas_Error.SetActive(false);
         _start_button.SetActive(true);
@@ -67,7 +75,7 @@ public class color_mix : MonoBehaviour
             _error_handel("Wrong Answer Do you Want to try again ?");
             return;
         }
-        _alpha += 10;
+        _alpha += _alpha >= 150 ? 2 : 10;
         change_color();
     }
 }
