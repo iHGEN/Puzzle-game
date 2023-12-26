@@ -21,7 +21,6 @@ public class CipherText : MonoBehaviour
     private int randNum;
     private bool isRestartGame; 
 
-    //user input
 
 
     void Start()
@@ -29,15 +28,20 @@ public class CipherText : MonoBehaviour
         randNum = Random.Range(0, words.Length);
         wrd = words[randNum];
         shift = Random.Range(1, 3);
+
+        for (int i = 0; i < shift; i++) 
+        {
+            Debug.Log(shift);
+        }
     }
     
     void Update()
     {
-        if (isWinner())
-        {
-            //winningScreen.SetActive(true);
-            Debug.Log("You Won!");
-        }
+        
+        
+            //winningScreen.SetActive(isWinner());
+            
+       
         
 
     }
