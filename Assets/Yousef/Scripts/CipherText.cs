@@ -37,12 +37,6 @@ public class CipherText : MonoBehaviour
     
     void Update()
     {
-        
-        
-            isWinner();
-
-        
-
 
     }
 
@@ -88,24 +82,22 @@ public class CipherText : MonoBehaviour
             }
         }
 
-        _plainText.text = plainText;
+        _plainText.text = plainText.Trim();
 
     }
 
    
-    public bool isWinner()
+    public void isWinner()
     {
-        if ( userText == plainText)
+        if (userText == plainText.Trim())
         {
             winningScreen.SetActive(true);
-            return true; 
             
         }
 
         else
         {
-            Debug.Log("You Lost!");
-            return false;
+                Debug.Log("You Lost!");
         }
 
     }
