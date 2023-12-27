@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class soda_game : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public int Soda_Count = 0;
     void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    public void check_for_win()
     {
-        
+
     }
 }
