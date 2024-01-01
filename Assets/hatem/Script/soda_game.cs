@@ -5,6 +5,7 @@ public class soda_game : MonoBehaviour
 {
     public int Soda = 0;
     public int _ball_count = 0;
+    [SerializeField] coins _coins;
     [SerializeField] GameObject[] _ball;
     [SerializeField] GameObject[] _soda;
     [SerializeField] GameObject[] _all_object_to_reset;
@@ -59,12 +60,18 @@ public class soda_game : MonoBehaviour
     }
     public void get_start()
     {
-        Reset_all();
-        menu_mesg("baling tin Game");
+        if (_coins.check_coins())
+        {
+            menu_error.SetActive(false);
+            _coins.take_conis(1);
+            Reset_all();
+            Soda = 0;
+            _ball_count = 0;
+            return;
+        }
+        menu_mesg("There's not enough coins to play");
         _start_button.gameObject.SetActive(true);
         menu_error.SetActive(true);
-        Soda = 0;
-        _ball_count = 0;
     }
     bool is_run_out_of_ball(GameObject[] ball)
     {
@@ -101,20 +108,22 @@ public class soda_game : MonoBehaviour
             case 0:
                 if (isyes)
                 {
-                    Reset_all();
-                    menu_error.SetActive(false);
+                    get_start();
                     return;
                 }
-                get_start();
+                menu_mesg("baling tin Game");
+                _start_button.gameObject.SetActive(true);
+                menu_error.SetActive(true);
                 break;
             case 1:
                 if (isyes)
                 {
-                    Reset_all();
-                    menu_error.SetActive(false);
+                    get_start();
                     return;
                 }
-                get_start();
+                menu_mesg("baling tin Game");
+                _start_button.gameObject.SetActive(true);
+                menu_error.SetActive(true);
                 break;
         }
     }
@@ -129,6 +138,7 @@ public class soda_game : MonoBehaviour
         }
         if(Soda == 6)
         {
+            _coins.add_coins(2);
             alert_number = 1;
             menu_mesg("You Win");
             menu_error.SetActive(true);

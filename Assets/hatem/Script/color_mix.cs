@@ -6,6 +6,7 @@ using TMPro;
 
 public class color_mix : MonoBehaviour
 {
+    [SerializeField] coins _coins;
     [SerializeField] GameObject[] _button;
     [SerializeField] Image[] _image;
     [SerializeField] TextMeshProUGUI _error_text;
@@ -28,6 +29,19 @@ public class color_mix : MonoBehaviour
         {
             _button[i].GetComponent<Button>().interactable = is_enabled;
         }
+    }
+   public void start_the_game()
+    {
+        if (_coins.check_coins())
+        {
+            _coins.take_conis(1);
+            _Canvas_Error.SetActive(false);
+            button_interactable(true);
+            change_color();
+            return;
+        }
+        button_interactable(false);
+        _error_handel("There's not enough coins to play");
     }
     public void change_color()
     {
@@ -59,8 +73,7 @@ public class color_mix : MonoBehaviour
         _level = 1;
         if (isyes)
         {
-            change_color();
-            _Canvas_Error.SetActive(false);
+            start_the_game();
             return;
         }
         button_interactable(false);

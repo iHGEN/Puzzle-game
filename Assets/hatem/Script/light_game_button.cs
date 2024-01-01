@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 public class light_game_button : MonoBehaviour
 {
+    [SerializeField] coins _coins;
     [SerializeField] GameObject[] _button;
     [SerializeField] Image[] _image;
     [SerializeField] TextMeshProUGUI _error_text;
@@ -26,7 +27,19 @@ public class light_game_button : MonoBehaviour
     }
     public void get_start()
     {
-        start_level(level_index);
+        if (_coins.check_coins())
+        {
+            _coins.take_conis(1);
+            _Error_canvas.SetActive(false);
+            button_interactable(true);
+            start_level(level_index);
+            return;
+        }
+        _light_game_text.text = "Light Game puzzle";
+        level_index = 1;
+        _start_button.SetActive(true);
+        button_interactable(false);
+        _Alert_mes("There's not enough coins to play");
     }
     void disable_light(Image image)
     {
@@ -81,7 +94,7 @@ public class light_game_button : MonoBehaviour
             case 1:
                 if(isyes)
                 {
-                    start_level(level_index);
+                    get_start();
                     _Error_canvas.SetActive(false);
                     return;
                 }
@@ -94,7 +107,7 @@ public class light_game_button : MonoBehaviour
                 if(isyes)
                 {
                     level_index++;
-                    start_level(level_index);
+                    get_start();
                     _Error_canvas.SetActive(false);
                     return;
                 }
@@ -121,6 +134,7 @@ public class light_game_button : MonoBehaviour
             _light_game_text.text = string.Empty;
             reset_level();
             _Alert_number = 2;
+            _coins.add_coins(2);
             _Alert_mes("Congratulations You Win \r\ndo you want to go to the next level");
             return;
         }
