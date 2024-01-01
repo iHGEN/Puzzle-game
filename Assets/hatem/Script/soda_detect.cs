@@ -9,7 +9,8 @@ public class soda_detect : MonoBehaviour
     {
         if(collision.gameObject.tag  == "soda")
         {
-            
+            soda_Game.Soda++;
+            gameObject.SetActive(false);
         }
     }
 }

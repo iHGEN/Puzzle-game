@@ -11,6 +11,7 @@ TagManager:
   - CableYellow
   - CableGrey
   - soda
+  - soda_1
   layers:
   - Default
   - TransparentFX
