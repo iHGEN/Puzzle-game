@@ -12,6 +12,8 @@ TagManager:
   - CableGrey
   - soda
   - soda_1
+  - groung_ball_soda
+  - ball
   layers:
   - Default
   - TransparentFX

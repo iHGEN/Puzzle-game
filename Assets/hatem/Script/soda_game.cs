@@ -38,7 +38,9 @@ public class soda_game : MonoBehaviour
     {
         for (int i = 0; i < _ball.Length; i++)
         {
+            _soda[i].GetComponent<Rigidbody>().isKinematic = true;
             _ball[i].transform.position = _ball_location[i];
+            _soda[i].GetComponent<Rigidbody>().isKinematic = false;
         }
         for (int x = 0; x < _soda.Length; x++)
         {
@@ -60,6 +62,7 @@ public class soda_game : MonoBehaviour
         Reset_all();
         menu_mesg("baling tin Game");
         _start_button.gameObject.SetActive(true);
+        menu_error.SetActive(true);
         Soda = 0;
         _ball_count = 0;
     }
@@ -86,6 +89,7 @@ public class soda_game : MonoBehaviour
     }
     public void menu_mesg(string text)
     {
+        _start_button.gameObject.SetActive(false);
         menu_text.text = text;
     }
    public void opition_index(bool isyes)
@@ -101,7 +105,7 @@ public class soda_game : MonoBehaviour
                     menu_error.SetActive(false);
                     return;
                 }
-                menu_error.SetActive(false);
+                get_start();
                 break;
             case 1:
                 if (isyes)
@@ -111,7 +115,6 @@ public class soda_game : MonoBehaviour
                     return;
                 }
                 get_start();
-                menu_error.SetActive(false);
                 break;
         }
     }
@@ -119,7 +122,6 @@ public class soda_game : MonoBehaviour
     {
         if (Soda != 6 & is_run_out_of_ball(_ball))
         {
-            _start_button.gameObject.SetActive(false);
             menu_mesg("You Lost \r\n\r\n do you want to try again ?");
             alert_number = 0;
             menu_error.SetActive(true);
