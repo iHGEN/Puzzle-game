@@ -8,7 +8,6 @@ using TMPro;
 public class Alphabetcheck : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] Light _light;
     [SerializeField] XRSocketInteractor _Socket;
     [SerializeField] string[] _answer;
     [SerializeField] string[] _question;
@@ -16,6 +15,9 @@ public class Alphabetcheck : MonoBehaviour
     [SerializeField] GameObject _spawon_point;
     [SerializeField] TextMeshProUGUI _question_text;
     [SerializeField] TextMeshProUGUI _answer_text;
+    [SerializeField] GameObject _canvas;
+    [SerializeField] TextMeshProUGUI _textmesh;
+    [SerializeField] coins _coins;
     string _final_answer;
     string _right_answer;
     bool _is_final_answer_complete;
@@ -25,30 +27,32 @@ public class Alphabetcheck : MonoBehaviour
     int _question_answer_number;
     void Start()
     {
-        _question_answer_number = Random.Range(0, _question.Length);
-        _answer_text.text = string.Empty;
-        generate_question(_question[_question_answer_number]);
-        _right_answer = _answer[_question_answer_number].ToUpper();
-        generate_answer(_answer[_question_answer_number]);
+        //_question_answer_number = Random.Range(0, _question.Length);
+        //_answer_text.text = string.Empty;
+        //generate_question(_question[_question_answer_number]);
+        //_right_answer = _answer[_question_answer_number].ToUpper();
+        //generate_answer(_answer[_question_answer_number]);
     }
    public  void rest(bool is_full_reset)
     {
-        _final_answer = string.Empty;
-        for (int i = 0; i < _is_spawon.Length;i++)
+        if (_is_spawon != null && _is_spawon.Length > 0)
         {
-            _is_spawon[i] = false;
-        }
-        if (is_full_reset)
-        {
-            _is_final_answer_complete = false;
-            for (int i = 0; i < _letter.Length; i++)
+            _final_answer = string.Empty;
+            for (int i = 0; i < _is_spawon.Length; i++)
             {
-                Destroy(_letter[i]);
+                _is_spawon[i] = false;
             }
-            _answer_text.text = string.Empty;
-            generate_answer(_answer[_question_answer_number]);
+            if (is_full_reset)
+            {
+                _is_final_answer_complete = false;
+                for (int i = 0; i < _letter.Length; i++)
+                {
+                    Destroy(_letter[i]);
+                }
+                _answer_text.text = string.Empty;
+            }
+            Resources.UnloadUnusedAssets();
         }
-        Resources.UnloadUnusedAssets();
     }
     void generate_question(string question)
     {
@@ -85,15 +89,31 @@ public class Alphabetcheck : MonoBehaviour
     }
     void check_answer(bool is_right)
     {
-        _light.color = is_right ? Color.green : Color.red;
+        if(!is_right)
+        {
+            _coins.take_conis(1);
+        }
+        else
+        {
+            _coins.add_coins(2);
+        }
+        _textmesh.text = is_right ? $"You Win" : $"You Lost";
+        _canvas.SetActive(true); 
     }
     public void change_the_question()
     {
-        _question_answer_number = Random.Range(0, _question.Length);
-        rest(true);
-        _answer_text.text = string.Empty;
-        generate_question(_question[_question_answer_number]);
-        _right_answer = _answer[_question_answer_number].ToUpper();
+        if (_coins.check_coins())
+        {
+            _question_answer_number = Random.Range(0, _question.Length);
+            rest(true);
+            _answer_text.text = string.Empty;
+            generate_question(_question[_question_answer_number]);
+            _right_answer = _answer[_question_answer_number].ToUpper();
+            generate_answer(_answer[_question_answer_number]);
+            return;
+        }
+        _textmesh.text = $"There's not enough coins to play";
+        _canvas.SetActive(true);
     }
     // Update is called once per frame
     void Update()
