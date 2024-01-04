@@ -66,7 +66,7 @@ public class Alphabetcheck : MonoBehaviour
                 {
                     _random_number = Random.Range(0, charalphabet.Length);
                     _prefab = Resources.Load<GameObject>($"BuildingRoomPrefabPacks/AlphabetAndNumbers/{charalphabet[_random_number]}");
-                    _letter[x] = Instantiate(_prefab, new Vector3(_spawon_point.transform.position.x / _spawon_point.transform.position.x * x * 2.5f, _spawon_point.transform.position.y, _spawon_point.transform.position.z), Quaternion.identity);
+                    _letter[x] = Instantiate(_prefab, new Vector3(_spawon_point.transform.position.x  + x * 2.5f, _spawon_point.transform.position.y, _spawon_point.transform.position.z), Quaternion.identity);
                     _is_spawon[x] = true;
                 }
             }
@@ -74,7 +74,7 @@ public class Alphabetcheck : MonoBehaviour
             _random_number = Random.Range(0, answer.Length);
             if (_is_spawon[_random_number]) { goto start; }
             _prefab = Resources.Load<GameObject>($"BuildingRoomPrefabPacks/AlphabetAndNumbers/{letter[_random_number]}");
-            _letter[i] = Instantiate(_prefab, new Vector3(_spawon_point.transform.position.x / _spawon_point.transform.position.x * i * 2.5f, _spawon_point.transform.position.y, _spawon_point.transform.position.z), Quaternion.identity);
+            _letter[i] = Instantiate(_prefab, new Vector3(_spawon_point.transform.position.x + i * 2.5f, _spawon_point.transform.position.y, _spawon_point.transform.position.z), Quaternion.identity);
             _is_spawon[_random_number] = true;
         }
         rest(false);
