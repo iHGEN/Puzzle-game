@@ -25,14 +25,6 @@ public class Alphabetcheck : MonoBehaviour
     bool[] _is_spawon;
     int _random_number = 0;
     int _question_answer_number;
-    void Start()
-    {
-        //_question_answer_number = Random.Range(0, _question.Length);
-        //_answer_text.text = string.Empty;
-        //generate_question(_question[_question_answer_number]);
-        //_right_answer = _answer[_question_answer_number].ToUpper();
-        //generate_answer(_answer[_question_answer_number]);
-    }
    public  void rest(bool is_full_reset)
     {
         if (_is_spawon != null && _is_spawon.Length > 0)
