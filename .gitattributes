@@ -29,6 +29,7 @@
 
 # models and playables
 *.blend filter=lfs -crlf
+*.unity
 *.wav filter=lfs diff=lfs merge=lfs -text
 
 # images
