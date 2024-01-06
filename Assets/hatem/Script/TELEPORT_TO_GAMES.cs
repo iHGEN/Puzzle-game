@@ -6,6 +6,8 @@ public class TELEPORT_TO_GAMES : MonoBehaviour
 {
     [SerializeField] GameObject[] _Games_point;
     [SerializeField] GameObject[] _Games_section;
+    [SerializeField] AudioClip[] _audioclip;
+    [SerializeField] AudioSource _audiosource;
     [SerializeField] GameObject _player;
     [SerializeField] float _distance;
     public bool _is_player_teleport;
@@ -16,6 +18,7 @@ public class TELEPORT_TO_GAMES : MonoBehaviour
         {
             if(Vector3.Distance(_player.transform.position,_Games_section[i].transform.position) < _distance)
             {
+                _audiosource.PlayOneShot(_audioclip[i], 0.7f);
                 _is_player_teleport = true;
                 _player.transform.position = new Vector3(_Games_point[i].transform.position.x, _Games_point[i].transform.position.y + 0.5f, _Games_point[i].transform.position.z);
             }
