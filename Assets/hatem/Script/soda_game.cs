@@ -146,7 +146,7 @@ public class soda_game : MonoBehaviour
         {
             _coins.add_coins(2);
             alert_number = 1;
-            menu_mesg("You Win");
+            menu_mesg("You Win do you want to play agian ?");
             menu_error.SetActive(true);
         }
     }

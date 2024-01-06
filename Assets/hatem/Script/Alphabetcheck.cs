@@ -89,7 +89,7 @@ public class Alphabetcheck : MonoBehaviour
         {
             _coins.add_coins(2);
         }
-        _textmesh.text = is_right ? $"You Win" : $"You Lost";
+        _textmesh.text = is_right ? $"You Win do you want to play agian ?" : $"You Lost \r\n\r\n do you want to try again ?";
         _canvas.SetActive(true); 
     }
     public void change_the_question()

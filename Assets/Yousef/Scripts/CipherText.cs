@@ -95,14 +95,14 @@ public class CipherText : MonoBehaviour
     {
         if (userText == plainText.Trim())
         {
-            _text.text = $"You Win";
+            _text.text = $"You Win do you want to play agian ?";
             winningScreen.SetActive(true);
             _coins.add_coins(2);
         }
         else
         {
             _coins.take_conis(1);
-            _text.text = $"You lost";
+            _text.text = $"You Lost \r\n\r\n do you want to try again ?";
             winningScreen.SetActive(true);
             return;
         }
