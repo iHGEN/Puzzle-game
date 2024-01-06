@@ -6,8 +6,10 @@ public class ButtonSequenceDetector : MonoBehaviour
     
     public ParticleSystem myParticleSystem;
 
-    
+    public coins _coins;
     public TextMeshProUGUI sequenceText;
+    public GameObject _error_canvas;
+    public TextMeshProUGUI _text;
 
   
     private string correctSequence = "123579";
@@ -24,7 +26,12 @@ public class ButtonSequenceDetector : MonoBehaviour
   
     public void ButtonPressed(int buttonNumber)
     {
-        
+        if(!_coins.check_coins())
+        {
+            _text.text = $"There's not enough coins to play";
+            _error_canvas.SetActive(true);
+            return;
+        }
         currentSequence += buttonNumber.ToString();
 
         
@@ -34,15 +41,19 @@ public class ButtonSequenceDetector : MonoBehaviour
         
         if (currentSequence == correctSequence)
         {
-           
-            myParticleSystem.Play();
+            _coins.add_coins(2);
+            myParticleSystem.Play(); 
+            _text.text = $"You Win";
+            _error_canvas.SetActive(true);
 
-            
             ResetSequence();
         }
         
         else if (currentSequence.Length >= correctSequence.Length)
         {
+            _text.text = $"You Lost";
+            _error_canvas.SetActive(true);
+            _coins.take_conis(1);
             ResetSequence();
         }
     }

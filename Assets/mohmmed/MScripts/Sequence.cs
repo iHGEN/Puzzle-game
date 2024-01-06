@@ -8,6 +8,7 @@ public class Sequence : MonoBehaviour
     public string[] spotLightNames = new string[4];
     bool[] is_right = new bool[4];
     [SerializeField] ParticleSystem particle;
+    [SerializeField] coins _coins;
     [SerializeField] GameObject[] buttons;
     [SerializeField] GameObject[] _Socket;
     [SerializeField] GameObject[] _cables;
@@ -40,6 +41,7 @@ public class Sequence : MonoBehaviour
         }
         if (!final_submit)
         {
+            _coins.add_coins(2);
             submit_result = true;
             particle.Play();
         }
@@ -52,7 +54,6 @@ public class Sequence : MonoBehaviour
             {
                 _Socket[i].SetActive(false);
                 _cables[i].transform.position = _orginal[i];
-
                 buttons[i].SetActive(true);
                 spotLightNames[i] = string.Empty;
                 buttonNames[i] = string.Empty;
@@ -77,6 +78,7 @@ public class Sequence : MonoBehaviour
         }
         else
         {
+            _coins.take_conis(1);
             button_reset();
             num = 0;
             return;

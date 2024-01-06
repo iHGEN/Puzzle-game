@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Threading.Tasks;
 
 public class soda_game : MonoBehaviour
 {
@@ -39,9 +40,9 @@ public class soda_game : MonoBehaviour
     {
         for (int i = 0; i < _ball.Length; i++)
         {
-            _soda[i].GetComponent<Rigidbody>().isKinematic = true;
+            _ball[i].GetComponent<Rigidbody>().isKinematic = true;
             _ball[i].transform.position = _ball_location[i];
-            _soda[i].GetComponent<Rigidbody>().isKinematic = false;
+            _ball[i].GetComponent<Rigidbody>().isKinematic = false;
         }
         for (int x = 0; x < _soda.Length; x++)
         {
@@ -127,8 +128,13 @@ public class soda_game : MonoBehaviour
                 break;
         }
     }
-    public void check_for_win()
+    public async void check_for_win()
     {
+
+        if(is_run_out_of_ball(_ball))
+        {
+            await Task.Delay(1500);
+        }
         if (Soda != 6 & is_run_out_of_ball(_ball))
         {
             menu_mesg("You Lost \r\n\r\n do you want to try again ?");
@@ -140,7 +146,7 @@ public class soda_game : MonoBehaviour
         {
             _coins.add_coins(2);
             alert_number = 1;
-            menu_mesg("You Win");
+            menu_mesg("You Win do you want to play agian ?");
             menu_error.SetActive(true);
         }
     }

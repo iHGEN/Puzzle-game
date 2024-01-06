@@ -10,6 +10,8 @@ public class CipherText : MonoBehaviour
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] TextMeshProUGUI _plainText;
     [SerializeField] GameObject winningScreen;
+    [SerializeField] coins _coins;
+    [SerializeField] TextMeshProUGUI _text;
 
     private string userText;
     private string wrd;
@@ -28,18 +30,20 @@ public class CipherText : MonoBehaviour
         randNum = Random.Range(0, words.Length);
         wrd = words[randNum];
         shift = Random.Range(1, 3);
-
-        for (int i = 0; i < shift; i++) 
-        {
-            Debug.Log(shift);
-        }
     }
     
-    void Update()
+   public void get_start()
     {
-
+        if(_coins.check_coins())
+        {
+            EncryptedText();
+        }
+        else
+        {
+            _text.text = $"There's not enough coins to play";
+            winningScreen.SetActive(true);
+        }
     }
-
    
     public void EncryptedText()
     {
@@ -61,7 +65,7 @@ public class CipherText : MonoBehaviour
             }
         }
 
-        text.text = cipherText;
+              text.text = cipherText;
     }
 
     public void DecryptText()
@@ -86,20 +90,22 @@ public class CipherText : MonoBehaviour
 
     }
 
-   
+
     public void isWinner()
     {
         if (userText == plainText.Trim())
         {
+            _text.text = $"You Win do you want to play agian ?";
             winningScreen.SetActive(true);
-            
+            _coins.add_coins(2);
         }
-
         else
         {
-                Debug.Log("You Lost!");
+            _coins.take_conis(1);
+            _text.text = $"You Lost \r\n\r\n do you want to try again ?";
+            winningScreen.SetActive(true);
+            return;
         }
-
     }
 
     
