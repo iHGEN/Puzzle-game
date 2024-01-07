@@ -1,29 +1,46 @@
 using UnityEngine;
-using TMPro; 
+using TMPro;
+using System;
 
 public class ButtonSequenceDetector : MonoBehaviour
 {
-    
-
-
     public coins _coins;
     public TextMeshProUGUI sequenceText;
     public GameObject _error_canvas;
     public TextMeshProUGUI _text;
-
-  
-    private string correctSequence = "123579";
-
-    
+    public TextMeshProUGUI _get_text_number;
+    private string correctSequence;
     private string currentSequence = "";
+    private int sequenceLength = 6;
 
     void Start()
     {
-       
         ResetSequence();
     }
 
-  
+    public void GenerateRandomSequence()
+    {
+        correctSequence = "";
+        for (int i = 0; i < sequenceLength; i++)
+        {
+            correctSequence += i == 3 ? $"\r\n{UnityEngine.Random.Range(1, 10).ToString()}" :$"{UnityEngine.Random.Range(1, 10).ToString()}";
+        }
+        _get_text_number.text = correctSequence;
+        sortnumber(correctSequence);
+    }
+
+    void sortnumber(string number)
+    {
+        number = number.Trim().Replace("\r\n", string.Empty).Replace(" ",string.Empty);
+        char[] textnumber = number.ToCharArray();
+        Array.Sort(textnumber);
+        correctSequence = string.Empty;
+        for (int i = 0; i < textnumber.Length; i++)
+        {
+            correctSequence += textnumber[i];
+        }
+    }
+
     public void ButtonPressed(int buttonNumber)
     {
         if(!_coins.check_coins())
@@ -38,8 +55,8 @@ public class ButtonSequenceDetector : MonoBehaviour
         if (sequenceText != null)
             sequenceText.text = currentSequence;
 
-        
-        if (currentSequence == correctSequence)
+
+        if (currentSequence == correctSequence.Trim().Replace("\r\n", string.Empty))
         {
             _coins.add_coins(2);
             _text.text = $"You Win";
@@ -63,5 +80,6 @@ public class ButtonSequenceDetector : MonoBehaviour
         currentSequence = "";
         if (sequenceText != null)
             sequenceText.text = currentSequence;
+        _get_text_number.text = string.Empty;
     }
 }
