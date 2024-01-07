@@ -4,7 +4,7 @@ using TMPro;
 public class ButtonSequenceDetector : MonoBehaviour
 {
     
-    public ParticleSystem myParticleSystem;
+
 
     public coins _coins;
     public TextMeshProUGUI sequenceText;
@@ -42,7 +42,6 @@ public class ButtonSequenceDetector : MonoBehaviour
         if (currentSequence == correctSequence)
         {
             _coins.add_coins(2);
-            myParticleSystem.Play(); 
             _text.text = $"You Win";
             _error_canvas.SetActive(true);
 
