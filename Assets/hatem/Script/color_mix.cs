@@ -13,6 +13,7 @@ public class color_mix : MonoBehaviour
     [SerializeField] GameObject _Canvas_Error;
     [SerializeField] TextMeshProUGUI _sub_text;
     [SerializeField] GameObject _start_button;
+
     float[] _color_rgb;
     int _random;
     int _button_id;
@@ -23,14 +24,14 @@ public class color_mix : MonoBehaviour
         _color_rgb = new float[3];
         button_interactable(false);
     }
-   public void button_interactable(bool is_enabled)
+    public void button_interactable(bool is_enabled)
     {
         for (int i = 0; i < _button.Length; i++)
         {
             _button[i].GetComponent<Button>().interactable = is_enabled;
         }
     }
-   public void start_the_game()
+    public void start_the_game()
     {
         if (_coins.check_coins())
         {
@@ -55,7 +56,7 @@ public class color_mix : MonoBehaviour
         }
         for (int i = 0; i < _button.Length; i++)
         {
-            if(i == _random)
+            if (i == _random)
             {
                 _button_id = _button[i].GetInstanceID();
             }
@@ -76,15 +77,31 @@ public class color_mix : MonoBehaviour
             start_the_game();
             return;
         }
+        EndTheGame();
+    }
+    void EndTheGame()
+    {
         button_interactable(false);
         _sub_text.text = "Color Mix Game puzzle";
         _Canvas_Error.SetActive(false);
         _start_button.SetActive(true);
     }
+    void GetTheRightAnswer()
+    {
+        for (int i = 0; i < _button.Length; i++)
+        {
+            if (_button_id == _button[i].GetInstanceID())
+            {
+                _button[i].GetComponent<Image>().color = Color.white;
+            }
+        }
+    }
     public void check_result(GameObject _object)
     {
         if (_button_id != _object.GetInstanceID())
         {
+            GetTheRightAnswer();
+            button_interactable(false);
             _error_handel("Wrong Answer Do you Want to try again ?");
             return;
         }

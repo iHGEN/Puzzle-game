@@ -10,6 +10,7 @@ public class LightGameButton : MonoBehaviour
     [SerializeField] private coins _coins;
     [SerializeField] private GameObject[] buttons;
     [SerializeField] private Image[] images;
+    [SerializeField] private TextMeshProUGUI[] textbutton;
     [SerializeField] private TextMeshProUGUI errorText;
     [SerializeField] private TextMeshProUGUI lightGameText;
     [SerializeField] private GameObject errorCanvas;
@@ -17,9 +18,10 @@ public class LightGameButton : MonoBehaviour
 
     private int alertNumber = 0;
     private int levelIndex = 1;
-    private int[] sequenceCheck;
     private bool[] isChosen;
     private int currentIndex = 0;
+
+    private Dictionary<int, int> sequenceCheck = new();
 
     void Start()
     {
@@ -29,6 +31,11 @@ public class LightGameButton : MonoBehaviour
 
     public void GetStart()
     {
+        DisableAllLight(images);
+        if(sequenceCheck.Count > 0)
+        {
+            sequenceCheck.Clear();
+        }
         if (_coins.check_coins())
         {
             _coins.take_conis(1);
@@ -48,7 +55,14 @@ public class LightGameButton : MonoBehaviour
     {
         image.color = Color.white;
     }
-
+    private void DisableAllLight(Image[] image)
+    {
+        for (int i = 0; i < images.Length; i++)
+        {
+            images[i].color = Color.white;
+            textbutton[i].text = string.Empty;
+        }
+    }
     private void ResetLevel()
     {
         for (int i = 0; i < isChosen.Length; i++)
@@ -71,7 +85,6 @@ public class LightGameButton : MonoBehaviour
         SetButtonInteractable(false);
         lightGameText.text = $"Current Level {level}";
         int maxSequenceLength = 4 + level;
-        sequenceCheck = new int[maxSequenceLength];
         List<int> usedIndices = new List<int>();
 
         for (int i = 0; i < maxSequenceLength; i++)
@@ -82,7 +95,7 @@ public class LightGameButton : MonoBehaviour
                 randomIndex = Random.Range(0, buttons.Length);
             } while (usedIndices.Contains(randomIndex));
             usedIndices.Add(randomIndex);
-            sequenceCheck[i] = buttons[randomIndex].GetInstanceID();
+            sequenceCheck.Add(i, buttons[randomIndex].GetInstanceID());
             images[randomIndex].color = Color.red;
             await Task.Delay(1000);
             DisableLight(images[randomIndex]);
@@ -135,21 +148,36 @@ public class LightGameButton : MonoBehaviour
         startButton.SetActive(true);
         levelIndex = 1;
     }
-
+    void GetRightAnswer()
+    {
+        for(int i = 0; i < sequenceCheck.Count;i++)
+        {
+            for (int x = 0; x < buttons.Length; x++)
+            {
+                if (sequenceCheck[i] == buttons[x].GetInstanceID())
+                {
+                    images[x].color = Color.green;
+                    textbutton[x].text = $"{i + 1}";
+                    break;
+                }
+            }
+        }
+    }
     public void CheckFinal(GameObject selectedObject)
     {
-        if (sequenceCheck[currentIndex] != selectedObject.GetInstanceID() || currentIndex >= sequenceCheck.Length)
+        if (sequenceCheck[currentIndex] != selectedObject.GetInstanceID() || currentIndex >= sequenceCheck.Count)
         {
             ResetLevel();
             lightGameText.text = string.Empty;
             alertNumber = 1;
             AlertMessage("Wrong Answer. Do you want to try again?");
+            GetRightAnswer();
             return;
         }
 
         currentIndex++;
 
-        if (currentIndex == sequenceCheck.Length)
+        if (currentIndex == sequenceCheck.Count)
         {
             lightGameText.text = string.Empty;
             ResetLevel();
