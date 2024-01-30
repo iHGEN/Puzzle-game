@@ -5,138 +5,157 @@ using UnityEngine.UI;
 using TMPro;
 using System.Threading.Tasks;
 
-public class light_game_button : MonoBehaviour
+public class LightGameButton : MonoBehaviour
 {
-    [SerializeField] coins _coins;
-    [SerializeField] GameObject[] _button;
-    [SerializeField] Image[] _image;
-    [SerializeField] TextMeshProUGUI _error_text;
-    [SerializeField] TextMeshProUGUI _light_game_text;
-    [SerializeField] GameObject _Error_canvas;
-    [SerializeField] GameObject _start_button;
-    int _Alert_number = 0;
-    int level_index = 1;
-    int[] seq_check;
-    bool[] _is_choose;
-    int index = 0;
-    
+    [SerializeField] private coins _coins;
+    [SerializeField] private GameObject[] buttons;
+    [SerializeField] private Image[] images;
+    [SerializeField] private TextMeshProUGUI errorText;
+    [SerializeField] private TextMeshProUGUI lightGameText;
+    [SerializeField] private GameObject errorCanvas;
+    [SerializeField] private GameObject startButton;
+
+    private int alertNumber = 0;
+    private int levelIndex = 1;
+    private int[] sequenceCheck;
+    private bool[] isChosen;
+    private int currentIndex = 0;
+
     void Start()
     {
-        _is_choose = new bool[_button.Length];
-        button_interactable(false);
+        isChosen = new bool[buttons.Length];
+        SetButtonInteractable(false);
     }
-    public void get_start()
+
+    public void GetStart()
     {
         if (_coins.check_coins())
         {
             _coins.take_conis(1);
-            _Error_canvas.SetActive(false);
-            button_interactable(true);
-            start_level(level_index);
+            errorCanvas.SetActive(false);
+            SetButtonInteractable(true);
+            StartLevel(levelIndex);
             return;
         }
-        _light_game_text.text = "Light Game puzzle";
-        level_index = 1;
-        _start_button.SetActive(true);
-        button_interactable(false);
-        _Alert_mes("There's not enough coins to play");
+        lightGameText.text = "Light Game puzzle";
+        levelIndex = 1;
+        startButton.SetActive(true);
+        SetButtonInteractable(false);
+        AlertMessage("There's not enough coins to play");
     }
-    void disable_light(Image image)
+
+    private void DisableLight(Image image)
     {
         image.color = Color.white;
     }
-    void reset_level()
+
+    private void ResetLevel()
     {
-        for(int i = 0; i < _is_choose.Length;i++)
+        for (int i = 0; i < isChosen.Length; i++)
         {
-            _image[i].color = Color.white;
-            _is_choose[i] = false;
+            images[i].color = Color.white;
+            isChosen[i] = false;
         }
     }
-    void button_interactable(bool is_enabled)
+
+    private void SetButtonInteractable(bool isEnabled)
     {
-        for (int i = 0; i < _is_choose.Length; i++)
+        foreach (var button in buttons)
         {
-            _button[i].GetComponent<Button>().interactable = is_enabled;
+            button.GetComponent<Button>().interactable = isEnabled;
         }
     }
-    public async void start_level(int num)
+
+    public async void StartLevel(int level)
     {
-        int random = 0;
-        button_interactable(false);
-        _light_game_text.text = $"Current Level {num}";
-        int max = 4 + num;
-        seq_check = new int[max]; 
-        for (int i = 0; i < max; i++)
+        SetButtonInteractable(false);
+        lightGameText.text = $"Current Level {level}";
+        int maxSequenceLength = 4 + level;
+        sequenceCheck = new int[maxSequenceLength];
+        List<int> usedIndices = new List<int>();
+
+        for (int i = 0; i < maxSequenceLength; i++)
         {
-            start:
-            random = Random.Range(0, _button.Length);
-            if(_is_choose[random]) { goto start; }
-            _is_choose[random] = true;
-            seq_check[i] = _button[random].GetInstanceID();
-            _image[random].color = Color.red;
+            int randomIndex;
+            do
+            {
+                randomIndex = Random.Range(0, buttons.Length);
+            } while (usedIndices.Contains(randomIndex));
+            usedIndices.Add(randomIndex);
+            sequenceCheck[i] = buttons[randomIndex].GetInstanceID();
+            images[randomIndex].color = Color.red;
             await Task.Delay(1000);
-            disable_light(_image[random]);
+            DisableLight(images[randomIndex]);
         }
-        button_interactable(true);
+        usedIndices.Clear();
+        SetButtonInteractable(true);
     }
-    public void _Alert_mes(string text)
+
+    public void AlertMessage(string text)
     {
-        _error_text.text = text;
-        _Error_canvas.SetActive(true);
+        errorText.text = text;
+        errorCanvas.SetActive(true);
     }
-    public void Alert_button(bool isyes)
+
+    public void AlertButton(bool isYes)
     {
-        index = 0;
-        button_interactable(false);
-        switch (_Alert_number)
+        currentIndex = 0;
+        SetButtonInteractable(false);
+
+        switch (alertNumber)
         {
             case 1:
-                if(isyes)
+                if (isYes)
                 {
-                    get_start();
-                    _Error_canvas.SetActive(false);
-                    return;
+                    GetStart();
                 }
-                _light_game_text.text = "Light Game puzzle";
-                level_index = 1;
-                _start_button.SetActive(true);
-                _Error_canvas.SetActive(false);
+                else
+                {
+                    ResetToInitialStage();
+                }
                 break;
             case 2:
-                if(isyes)
+                if (isYes)
                 {
-                    level_index++;
-                    get_start();
-                    _Error_canvas.SetActive(false);
-                    return;
+                    levelIndex++;
+                    GetStart();
                 }
-                _light_game_text.text = "Light Game puzzle";
-                _start_button.SetActive(true);
-                level_index = 1;
-                _Error_canvas.SetActive(false);
+                else
+                {
+                    ResetToInitialStage();
+                }
                 break;
         }
+        errorCanvas.SetActive(false);
     }
-    public void check_final(GameObject _object)
+
+    private void ResetToInitialStage()
     {
-        if (seq_check[index] != _object.GetInstanceID() || index > seq_check.Length)
+        lightGameText.text = "Light Game puzzle";
+        startButton.SetActive(true);
+        levelIndex = 1;
+    }
+
+    public void CheckFinal(GameObject selectedObject)
+    {
+        if (sequenceCheck[currentIndex] != selectedObject.GetInstanceID() || currentIndex >= sequenceCheck.Length)
         {
-            reset_level();
-            _light_game_text.text = string.Empty;
-            _Alert_number = 1;
-            _Alert_mes("Wrong Answer Do you want to try agian ?");
+            ResetLevel();
+            lightGameText.text = string.Empty;
+            alertNumber = 1;
+            AlertMessage("Wrong Answer. Do you want to try again?");
             return;
         }
-        index++;
-        if (index == seq_check.Length)
+
+        currentIndex++;
+
+        if (currentIndex == sequenceCheck.Length)
         {
-            _light_game_text.text = string.Empty;
-            reset_level();
-            _Alert_number = 2;
+            lightGameText.text = string.Empty;
+            ResetLevel();
+            alertNumber = 2;
             _coins.add_coins(2);
-            _Alert_mes("Congratulations You Win \r\ndo you want to go to the next level");
-            return;
+            AlertMessage("Congratulations! You win.\nDo you want to go to the next level?");
         }
     }
 }
